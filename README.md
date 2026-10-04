@@ -2,59 +2,59 @@
 
 **Local-First Azure Cost and Resource Leak Detector**
 
-Özellikle öğrenciler, bağımsız geliştiriciler ve küçük start-up'lar Azure üzerinde denemeler yaparken açık unuttukları test veritabanları, IP'ler veya sanal makineler yüzünden ay sonunda sürpriz faturalarla karşılaşabilirler. Azure Portal içindeki bütçe uyarıları genellikle e-posta atar ama geç kalabilir ve kaynakları proaktif olarak analiz etmez.
+Students, independent developers, and small startups often face surprise cloud bills at the end of the month due to forgotten test databases, public IPs, or virtual machines running on Azure. While budget alerts in the Azure Portal send emails, they can often be too late and do not proactively analyze or pinpoint the idle resources.
 
-**Azure FinOps CLI**, terminalden tek komutla çalışan, lokal Azure CLI kimlik doğrulamanıza bağlanan ve "zombi" kaynakları (örn. CPU kullanımı %1'in altında olan) tespit edip size saatlik/aylık ne kadar para kaybettirdiğini gösteren hafif bir araçtır.
+**Azure FinOps CLI** is a lightweight, local-first command-line tool that hooks into your existing local Azure CLI authentication. It scans your subscriptions for "zombie" resources (e.g., VMs running under 1% CPU utilization) and calculates exactly how much money they are wasting you per hour and per month.
 
-## ✨ Özellikler
+## ✨ Features
 
-- **🔒 Local-First Kimlik Doğrulama:** Sizden hiçbir zaman şifre veya API key istemez. Bilgisayarınızdaki mevcut `az login` oturumunu güvenle kullanır.
-- **🧟 Zombi Kaynak Tespiti:** Belirli bir eşiğin altında çalışan (örneğin %1 CPU) sanal makine ve veritabanlarını bulur.
-- **💸 Gerçek Zamanlı Fiyatlandırma:** Azure Retail Prices API ile entegredir. Kaynağın bulunduğu bölgeye (Region) ve modeline (SKU) göre kuruşu kuruşuna güncel maliyetleri çeker.
-- **🌍 Çoklu Para Birimi (Currency):** Maliyetleri sadece Dolar (USD) değil, Türk Lirası (TRY) veya Euro (EUR) gibi kurlarda da görüntüleyebilirsiniz.
-- **🛠️ Anında Aksiyon:** Terminalden çıkmadan zombi kaynakları uykuya alabilir (Deallocate) veya silebilirsiniz.
-- **🎨 Zengin Terminal Arayüzü:** `Spectre.Console` ile hazırlanmış okunabilir ve renkli tablolar.
+- **🔒 Local-First Authentication:** It never asks for passwords or API keys. It safely uses your existing local `az login` session.
+- **🧟 Zombie Resource Detection:** Finds virtual machines and databases running below a specific threshold (e.g., 1% CPU).
+- **💸 Real-Time Pricing:** Integrated with the Azure Retail Prices API. It fetches accurate, up-to-date pricing based on the exact Region and SKU of your idle resources.
+- **🌍 Multi-Currency Support:** View your wasted costs not just in US Dollars (USD), but in any supported currency like Turkish Lira (TRY) or Euros (EUR).
+- **🛠️ Immediate Action:** Sleep (Deallocate) or delete zombie resources directly from your terminal.
+- **🎨 Rich Terminal UI:** Beautiful, readable, and colorful tables powered by `Spectre.Console`.
 
-## 🚀 Kurulum ve Kullanım
+## 🚀 Installation and Usage
 
-### Ön Koşullar
+### Prerequisites
 - [.NET 10.0 SDK](https://dotnet.microsoft.com/download)
 - [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli)
 
-### Adım 1: Azure'a Giriş Yapın
-Terminalinizi açın ve Azure CLI üzerinden giriş yapın:
+### Step 1: Login to Azure
+Open your terminal and authenticate via Azure CLI:
 ```bash
 az login
 ```
 
-### Adım 2: Projeyi Çalıştırın
-Projeyi klonladıktan sonra proje dizinine gidip uygulamayı çalıştırın:
+### Step 2: Run the Project
+Navigate to the project directory and run the application:
 ```bash
 cd AzureFinOpsCLI
 
-# Temel tarama (Varsayılan olarak %1 CPU altını ve USD kurunu kullanır)
+# Basic scan (Defaults to <1% CPU threshold and USD currency)
 dotnet run -- analyze
 
-# Türk Lirası cinsinden ve özel CPU eşiği ile tarama
+# Scan with custom CPU threshold, lookback days, and currency
 dotnet run -- analyze --cpu-threshold 2.0 --lookback-days 14 --currency TRY
 ```
 
-### Adım 3: Kaynaklara Aksiyon Alın
-Tarama sonucunda bulduğunuz bir kaynağı kapatmak veya silmek isterseniz:
+### Step 3: Take Action
+If you want to stop or delete a resource found during the scan:
 ```bash
-dotnet run -- action --id "<KAYNAK_ID_BURAYA>" --type sleep
+dotnet run -- action --id "<RESOURCE_ID_HERE>" --type sleep
 ```
 
-## 🏗️ Kullanılan Teknolojiler
+## 🏗️ Technologies Used
 
 - **C# / .NET 10**
-- **System.CommandLine:** Modern komut satırı ayrıştırması için.
-- **Spectre.Console:** Zengin terminal arayüzü (UI) ve tablolar için.
-- **Azure Identity & Azure Resource Manager SDK:** Azure kimlik doğrulama ve yönetim işlemleri için.
-- **Azure Retail Prices API:** Bölgesel anlık fiyat çekimleri için.
+- **System.CommandLine:** For modern command-line parsing.
+- **Spectre.Console:** For rich terminal user interfaces and tables.
+- **Azure Identity & Azure Resource Manager SDK:** For Azure authentication and resource management.
+- **Azure Retail Prices API:** For real-time regional cost estimation.
 
-## 🤝 Katkıda Bulunma
-Bu proje geliştirilmeye açıktır. Pull Request (PR) göndererek projeye katkıda bulunabilirsiniz. Özellikle yeni Azure kaynak türlerinin (Storage Accounts, App Services vb.) zombi tespiti için eklemeler yapabilirsiniz.
+## 🤝 Contributing
+Contributions, issues, and feature requests are welcome! Feel free to check the issues page or submit a Pull Request (PR) to add zombie detection for new Azure resource types (Storage Accounts, App Services, etc.).
 
 ---
-*Geliştiricileri sürpriz bulut faturalarından korumak için tasarlanmıştır. ❤️*
+*Built to protect developers from surprise cloud bills. ❤️*
