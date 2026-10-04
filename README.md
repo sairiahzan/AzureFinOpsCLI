@@ -56,5 +56,8 @@ dotnet run -- action --id "<RESOURCE_ID_HERE>" --type sleep
 ## 🤝 Contributing
 Contributions, issues, and feature requests are welcome! Feel free to check the issues page or submit a Pull Request (PR) to add zombie detection for new Azure resource types (Storage Accounts, App Services, etc.).
 
+## 📄 License
+This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)** - see the [LICENSE](LICENSE) file for details.
+
 ---
 *Built to protect developers from surprise cloud bills. ❤️*
